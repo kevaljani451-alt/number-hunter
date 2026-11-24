@@ -1,20 +1,22 @@
 # NUMBER HUNTER
 
-A browser-based number guessing game served by a small Python web server.
-The game uses only Python's standard library.
+A number guessing game with a browser version and a Python server version.
 
-## Run locally
+## Play online
+
+The browser version is published with GitHub Pages:
+<https://kevaljani451-alt.github.io/number-hunter/>.
+
+Every visitor plays independently in their own browser.
+
+## Run the browser version locally
+
+Open `index.html` in a web browser. No installation or server is needed.
+
+## Run the Python version locally
 
 1. Install Python 3.
 2. Open a terminal in this folder.
 3. Run `python main.py`.
 4. The game opens at <http://127.0.0.1:8000>.
 5. Keep the terminal open while playing. Press Ctrl+C to stop the server.
-
-## Deploy on Render
-
-This repository includes a Render Blueprint in `render.yaml`.
-Create a new Blueprint in Render and select this public GitHub repository.
-Render will build and start the Python web server and provide a public URL.
-
-Each browser gets its own game session.

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f5fb">
+    <title>NUMBER HUNTER - Number Guessing Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f2f5fb;
+            color: #17213a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .page {
+            width: min(1050px, 92%);
+            margin: 0 auto;
+            padding: 28px 0 42px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 34px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .logo {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 13px;
+            background: #635bdb;
+            color: white;
+            font-size: 23px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 42px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            color: #635bdb;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 12px 0;
+            font-size: clamp(42px, 6vw, 66px);
+            line-height: 1.02;
+        }
+
+        .intro {
+            max-width: 430px;
+            color: #65708a;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .feature {
+            padding: 9px 13px;
+            border: 1px solid #e0e5f0;
+            border-radius: 20px;
+            background: white;
+            color: #58627a;
+            font-size: 13px;
+        }
+
+        .game-card {
+            padding: 30px;
+            border: 1px solid #e7eaf2;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 18px 55px rgba(37, 48, 82, 0.09);
+        }
+
+        .game-card h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .muted {
+            color: #758099;
+            line-height: 1.5;
+        }
+
+        .button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border: 0;
+            border-radius: 11px;
+            background: #635bdb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #5149c5;
+        }
+
+        .button:focus-visible,
+        .difficulty:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #aaa5ff;
+            outline-offset: 2px;
+        }
+
+        .button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .button.secondary {
+            border: 1px solid #dfe3ed;
+            background: white;
+            color: #313b55;
+        }
+
+        .button.secondary:hover {
+            background: #f6f7fb;
+        }
+
+        .difficulty-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .difficulty {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 15px;
+            border: 1px solid #e3e7f0;
+            border-radius: 12px;
+            background: white;
+            color: #222c45;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .difficulty:hover {
+            border-color: #8179ec;
+            background: #f8f7ff;
+        }
+
+        .difficulty strong,
+        .difficulty span {
+            display: block;
+        }
+
+        .difficulty small {
+            display: block;
+            margin-top: 4px;
+            color: #758099;
+        }
+
+        .game-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .level-pill {
+            padding: 7px 11px;
+            border-radius: 20px;
+            background: #eeedff;
+            color: #5149c5;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .attempts {
+            margin: 22px 0 16px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f5f6fa;
+            color: #58627a;
+            font-size: 14px;
+        }
+
+        .attempts strong {
+            color: #222c45;
+        }
+
+        .guess-form {
+            display: flex;
+            gap: 9px;
+        }
+
+        .guess-form input {
+            width: 100%;
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid #dfe3ed;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .guess-form .button {
+            width: auto;
+            min-width: 105px;
+            margin: 0;
+        }
+
+        .message {
+            min-height: 48px;
+            margin: 16px 0 0;
+            padding: 13px;
+            border-radius: 10px;
+            background: #f5f6fa;
+            color: #46516a;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            background: #eaf8f0;
+            color: #187447;
+        }
+
+        .message.error {
+            background: #fff0ed;
+            color: #a63b2e;
+        }
+
+        .how-to {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f5f6fa;
+            color: #59647c;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .how-to p {
+            margin: 5px 0;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        footer {
+            margin-top: 34px;
+            color: #8891a5;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 760px) {
+            .page {
+                padding-top: 20px;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .game-card {
+                padding: 23px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header>
+            <div class="logo">?</div>
+            <div>NUMBER HUNTER</div>
+        </header>
+
+        <main class="layout">
+            <section>
+                <div class="eyebrow">A little logic. A little luck.</div>
+                <h1>Find the<br>hidden number.</h1>
+                <p class="intro">
+                    Pick a difficulty, make your guesses, and follow the clues.
+                    How quickly can you find the number?
+                </p>
+                <div class="feature-list">
+                    <span class="feature">Three difficulty levels</span>
+                    <span class="feature">Earn points for a quick win</span>
+                    <span class="feature">No extra installs</span>
+                </div>
+            </section>
+
+            <section class="game-card">
+                <div id="welcome-panel">
+                    <h2>Ready to play?</h2>
+                    <p class="muted">Your number-hunting challenge starts here.</p>
+                    <button class="button" id="start-button" type="button">Start Game</button>
+                    <button class="button secondary" id="how-button" type="button">How to Play</button>
+                    <div class="how-to" id="how-to" hidden>
+                        <p>1. Choose Easy, Medium, or Hard.</p>
+                        <p>2. Guess a whole number in the shown range.</p>
+                        <p>3. Use the high/low hints before attempts run out.</p>
+                        <p>4. A correct guess earns base points plus 5 points per remaining attempt.</p>
+                        <p>Numbers outside the range do not use an attempt.</p>
+                    </div>
+                    <div class="difficulty-list" id="difficulty-list" hidden>
+                        <button class="difficulty" data-level="easy" type="button">
+                            <span><strong>Easy</strong><small>1 to 20</small></span>
+                            <span>7 attempts</span>
+                        </button>
+                        <button class="difficulty" data-level="medium" type="button">
+                            <span><strong>Medium</strong><small>1 to 50</small></span>
+                            <span>6 attempts</span>
+                        </button>
+                        <button class="difficulty" data-level="hard" type="button">
+                            <span><strong>Hard</strong><small>1 to 100</small></span>
+                            <span>5 attempts</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="game-panel" hidden>
+                    <div class="game-top">
+                        <h2>Make your guess</h2>
+                        <span class="level-pill" id="level-pill"></span>
+                    </div>
+                    <p class="muted" id="range-text"></p>
+                    <div class="attempts">
+                        Attempts remaining: <strong id="attempt-count"></strong>
+                    </div>
+                    <form class="guess-form" id="guess-form">
+                        <input id="guess-input" type="number" step="1" required
+                               placeholder="Enter a number" aria-label="Your guess">
+                        <button class="button" id="guess-button" type="submit">Guess</button>
+                    </form>
+                    <p class="message" id="message" role="status">Good luck!</p>
+                    <button class="button secondary" id="again-button" type="button" hidden>Play Again</button>
+                    <button class="button secondary" id="menu-button" type="button">Change Difficulty</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>NUMBER HUNTER - Guess smart and have fun.</footer>
+    </div>
+
+    <script>
+        const difficultySettings = {
+            easy: { name: "Easy", highestNumber: 20, attempts: 7, points: 10 },
+            medium: { name: "Medium", highestNumber: 50, attempts: 6, points: 20 },
+            hard: { name: "Hard", highestNumber: 100, attempts: 5, points: 30 }
+        };
+
+        const welcomePanel = document.getElementById("welcome-panel");
+        const gamePanel = document.getElementById("game-panel");
+        const difficultyList = document.getElementById("difficulty-list");
+        const howTo = document.getElementById("how-to");
+        const guessForm = document.getElementById("guess-form");
+        const guessInput = document.getElementById("guess-input");
+        const messageBox = document.getElementById("message");
+        const againButton = document.getElementById("again-button");
+        let currentLevel = "";
+        let currentDifficulty = null;
+        let secretNumber = 0;
+        let attemptsRemaining = 0;
+        let gameActive = false;
+
+        function showMessage(text, kind) {
+            messageBox.textContent = text;
+            messageBox.className = "message";
+            if (kind) {
+                messageBox.classList.add(kind);
+            }
+        }
+
+        function startGame(level) {
+            currentLevel = level;
+            currentDifficulty = difficultySettings[level];
+            secretNumber = Math.floor(Math.random() * currentDifficulty.highestNumber) + 1;
+            attemptsRemaining = currentDifficulty.attempts;
+            gameActive = true;
+
+            document.getElementById("level-pill").textContent = currentDifficulty.name;
+            document.getElementById("range-text").textContent =
+                "Guess a number from 1 to " + currentDifficulty.highestNumber + ".";
+            document.getElementById("attempt-count").textContent = attemptsRemaining;
+            guessInput.min = 1;
+            guessInput.max = currentDifficulty.highestNumber;
+            guessInput.value = "";
+            guessInput.disabled = false;
+            document.getElementById("guess-button").disabled = false;
+            againButton.hidden = true;
+            showMessage("Your number is ready. Make your first guess!");
+            welcomePanel.hidden = true;
+            gamePanel.hidden = false;
+            guessInput.focus();
+        }
+
+        function finishGame() {
+            gameActive = false;
+            guessInput.disabled = true;
+            document.getElementById("guess-button").disabled = true;
+            againButton.hidden = false;
+        }
+
+        document.getElementById("start-button").addEventListener("click", function () {
+            howTo.hidden = true;
+            difficultyList.hidden = false;
+        });
+
+        document.getElementById("how-button").addEventListener("click", function () {
+            howTo.hidden = !howTo.hidden;
+        });
+
+        document.querySelectorAll(".difficulty").forEach(function (button) {
+            button.addEventListener("click", function () {
+                startGame(button.dataset.level);
+            });
+        });
+
+        guessForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!gameActive || !guessInput.reportValidity()) {
+                return;
+            }
+
+            const guess = Number(guessInput.value);
+            if (!Number.isInteger(guess)) {
+                showMessage("Please enter a whole number.", "error");
+                return;
+            }
+
+            if (guess < 1 || guess > currentDifficulty.highestNumber) {
+                showMessage(
+                    "Enter a number from 1 to " + currentDifficulty.highestNumber + ".",
+                    "error"
+                );
+                return;
+            }
+
+            attemptsRemaining -= 1;
+            document.getElementById("attempt-count").textContent = attemptsRemaining;
+
+            if (guess === secretNumber) {
+                const score = currentDifficulty.points + (attemptsRemaining * 5);
+                showMessage(
+                    "Correct! You win! Final score: " + score + " points.",
+                    "success"
+                );
+                finishGame();
+            } else if (attemptsRemaining === 0) {
+                showMessage(
+                    "No attempts left. The secret number was " + secretNumber +
+                    ". Final score: 0 points.",
+                    "error"
+                );
+                finishGame();
+            } else if (guess > secretNumber) {
+                showMessage("Too High! Try a smaller number.");
+            } else {
+                showMessage("Too Low! Try a bigger number.");
+            }
+
+            guessInput.value = "";
+            if (gameActive) {
+                guessInput.focus();
+            }
+        });
+
+        againButton.addEventListener("click", function () {
+            startGame(currentLevel);
+        });
+
+        document.getElementById("menu-button").addEventListener("click", function () {
+            gameActive = false;
+            gamePanel.hidden = true;
+            welcomePanel.hidden = false;
+            difficultyList.hidden = false;
+        });
+    </script>
+</body>
+</html>
